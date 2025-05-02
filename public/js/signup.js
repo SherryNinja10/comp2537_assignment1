@@ -27,10 +27,12 @@ signupForm.addEventListener('submit', async (e) => {
             alert(result.message);
             window.location.href = '/memberspage';
         } else {
-            alert(result.error);
-        }
+            // Show specific error from server if available
+            alert(result.error || 'Something went wrong. Please try again.');
+        }        
     } catch (error) {
-        alert(error);
+        alert('Network error. Please try again.');
+        console.error(error);
     }
 });
 

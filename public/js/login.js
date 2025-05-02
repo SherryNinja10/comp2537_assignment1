@@ -26,9 +26,10 @@ loginButton.addEventListener("submit", async (e) => {
             alert(result.message);
             window.location.href = '/memberspage';
         } else {
-            alert("Is the error here?");
-        }
-    } catch (err) {
-        alert(err);
+            alert(result.error || 'Something went wrong. Please try again.');
+        }        
+    } catch (error) {
+        alert('Network error. Please try again.');
+        console.error(error);
     }
 });

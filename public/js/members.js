@@ -2,25 +2,25 @@ const logoutButton = document.getElementById("logoutButton");
 const memberName = document.getElementById("memberName");
 const randomImage = document.getElementById("randomImage");
 
-async function getUsername() {
-    const response = await fetch('/getUsername', {
-        method: 'GET',
-        headers: {  // ✅ fixed typo here
-            'Content-Type': 'application/json',
-        },
-    });
+// async function getUsername() {
+//     const response = await fetch('/getUsername', {
+//         method: 'GET',
+//         headers: {  // ✅ fixed typo here
+//             'Content-Type': 'application/json',
+//         },
+//     });
 
-    const text = await response.text();
-    const result = text ? JSON.parse(text) : {};
+//     const text = await response.text();
+//     const result = text ? JSON.parse(text) : {};
 
-    if (response.ok) {
-        memberName.innerText = result.username;
-    } else {
-        window.location.href = "/loginpage";
-    }
-};
+//     if (response.ok) {
+//         memberName.innerText = result.username;
+//     } else {
+//         window.location.href = "/loginpage";
+//     }
+// };
 
-getUsername();
+// getUsername();
 
 logoutButton.addEventListener("click", async () => {
     await fetch("/logout", {

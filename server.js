@@ -92,6 +92,7 @@ app.get("/signuppage", (req, res) => {
 app.get("/memberspage", (req, res) => {
     if (req.session.username) {
         let doc = fs.readFileSync("./app/html/members.html", "utf8", "utf8");
+        doc = doc.replace("{{USERNAME}}", req.session.username);
         res.setHeader("Content-Type", "text/html");
         res.send(doc);
     } else {
@@ -113,14 +114,11 @@ app.post("/signup", async (req, res) => {
     const validationResult = schema.validate(json);
 
     if (validationResult.error) {
-        // STEP 3: If validation fails
         console.log(validationResult.error);
-        res.send("Validation Error: " + validationResult.error.details[0].message);
-        return;
+        return res.status(400).json({ error: validationResult.error.details[0].message });
     }
-
-    // STEP 4: If validation passes, continue
-    const salt = 12; // You need to define salt if not already
+    
+    const salt = 12; 
     const hashedPassword = bcrypt.hashSync(json.password, salt);
 
     const user = {
@@ -129,10 +127,8 @@ app.post("/signup", async (req, res) => {
         password: hashedPassword
     };
 
-    // STEP 5: Insert user into MongoDB
     try {
         const result = await usersCollection.insertOne(user);
-        // STEP 6: Create session and redirect
         req.session.username = user.username;
         res.status(201).json({ message: `User inserted with ID: ${result.insertedId}` });
       } catch (err) {
@@ -143,6 +139,19 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
     const json = req.body;
+
+    const schema = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).max(20).required()
+    });
+
+    const validationResult = schema.validate(json);
+
+    if (validationResult.error) {
+        console.log(validationResult.error);
+        return res.status(400).json({ error: validationResult.error.details[0].message });
+    }
+
     const result = await usersCollection.findOne({ email: json.email })
 
     if(result) {
