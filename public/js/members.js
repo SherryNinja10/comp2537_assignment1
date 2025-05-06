@@ -5,7 +5,7 @@ const randomImage = document.getElementById("randomImage");
 // async function getUsername() {
 //     const response = await fetch('/getUsername', {
 //         method: 'GET',
-//         headers: {  // ✅ fixed typo here
+//         headers: {
 //             'Content-Type': 'application/json',
 //         },
 //     });
